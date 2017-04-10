@@ -1,22 +1,21 @@
 {
+    "name": "nikmakan-olx/omnipay-paygate",
+    "version": "2.0.0",
     "type": "library",
-    "package": {
-        "name": "nikmakan-olx/omnipay-paygate",
-        "autoload": {
-            "psr-0" : {
-                "Omnipay\\PayGate\\" : "src/"
-            }
-        },
-        "require": {
-            "omnipay/common": "~2.0"
-        },
-        "require-dev": {
-            "omnipay/tests": "~2.0"
-        },
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0.x-dev"
-            }
+    "autoload": {
+        "psr-4" : {
+            "Omnipay\\PayGate\\" : "src/"
+        }
+    },
+    "require": {
+        "omnipay/common": "~2.0"
+    },
+    "require-dev": {
+        "omnipay/tests": "~2.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
         }
     }
 }
