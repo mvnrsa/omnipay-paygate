@@ -65,6 +65,7 @@ class PurchaseRequest extends AbstractRequest
 
     public function getData()
     {
+
         $this->validate('merchantId', 'keyVersion', 'secretKey', 'amount', 'returnUrl', 'currency');
         
         $transRef = $this->getTransactionReference() ?: $this->getTransactionId();
