@@ -6,9 +6,9 @@ use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Exception\InvalidRequestException;
 
 /**
- * PayGate Purchase Request
+ * PayGate Initiate Request
  */
-class PurchaseRequest extends AbstractRequest
+class InitiateRequest extends AbstractRequest
 {
     public $testEndpoint = 'https://secure.paygate.co.za/payweb3/initiate.trans';
     public $liveEndpoint = 'https://secure.paygate.co.za/payweb3/initiate.trans';
@@ -42,7 +42,7 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('secretKey', $value);
     }
-    
+
     public function getOrderId()
     {
         return $this->getParameter('orderId');
@@ -66,7 +66,7 @@ class PurchaseRequest extends AbstractRequest
     public function getData()
     {
         $this->validate('merchantId', 'keyVersion', 'secretKey', 'amount', 'returnUrl', 'currency');
-        
+
         $transRef = $this->getTransactionReference() ?: $this->getTransactionId();
 
         $data = array();
