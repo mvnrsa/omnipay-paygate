@@ -26,24 +26,6 @@ class Gateway extends AbstractGateway
         );
     }
 
-//'PAYGATE_ID' => '123',
-//'REFERENCE' => '324',
-//'AMOUNT' => '324',
-//'CURRENCY' => '432',
-//'RETURN_URL' => '324',
-//'LOCALE' => '432',
-//'COUNTRY' => '234',
-//'EMAIL' => '432',
-//'PAY_METHOD' => '432',
-//'PAY_METHOD_DETAIL' => '234',
-//'NOTIFY_URL' => 'testing',
-//'USER1' => '234',
-//'USER2' => '432',
-//'USER3' => '234',
-//'description' => 'test',
-//'amount' => '234.32',
-//'cancelUrl' => '234'
-
     public function getMerchantId()
     {
         return $this->getParameter('merchantId');
@@ -75,22 +57,8 @@ class Gateway extends AbstractGateway
     }
 
 
-    public function initiate(array $parameters = array())
-    {
-        return $this->createRequest('\Omnipay\PayGate\Message\InitiateRequest', $parameters);
-    }
 
-    public function process(array $parameters = array())
-    {
-        return $this->createRequest('\Omnipay\PayGate\Message\CompletePurchaseRequest', $parameters);
-    }
-
-    public function query(array $parameters = array())
-    {
-        return $this->createRequest('\Omnipay\PayGate\Message\CompletePurchaseRequest', $parameters);
-    }
-
-// EXISTING
+    // BASE
 
     public function purchase(array $parameters = array())
     {
@@ -102,6 +70,11 @@ class Gateway extends AbstractGateway
         return $this->createRequest('\Omnipay\PayGate\Message\CompletePurchaseRequest', $parameters);
     }
 
-// EXISTING
+    // CUSTOM
+
+    public function query(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\PayGate\Message\QueryRequest', $parameters);
+    }
 
 }
