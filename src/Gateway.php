@@ -36,16 +36,6 @@ class Gateway extends AbstractGateway
         return $this->setParameter('merchantId', $value);
     }
 
-    public function getKeyVersion()
-    {
-        return $this->getParameter('keyVersion');
-    }
-
-    public function setKeyVersion($value)
-    {
-        return $this->setParameter('keyVersion', $value);
-    }
-
     public function getSecretKey()
     {
         return $this->getParameter('secretKey');
@@ -54,6 +44,11 @@ class Gateway extends AbstractGateway
     public function setSecretKey($value)
     {
         return $this->setParameter('secretKey', $value);
+    }
+
+    public function getFormRedirectUrl()
+    {
+        return 'https://secure.paygate.co.za/payweb3/process.trans';
     }
 
 

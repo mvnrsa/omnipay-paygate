@@ -13,14 +13,6 @@ class PurchaseRequest extends AbstractRequest
     public $testEndpoint = 'https://secure.paygate.co.za/payweb3/initiate.trans';
     public $liveEndpoint = 'https://secure.paygate.co.za/payweb3/initiate.trans';
 
-    public function getPaygateId()
-    {
-        return $this->getParameter('PAYGATE_ID');
-    }
-    public function setPayGateId($value)
-    {
-        return $this->setParameter('PAYGATE_ID', $value);
-    }
     public function getReference()
     {
         return $this->getParameter('REFERENCE');
@@ -125,6 +117,10 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('USER3', $value);
     }
+
+
+
+
     public function getMerchantId()
     {
         return $this->getParameter('merchantId');
@@ -133,72 +129,57 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('merchantId', $value);
     }
-    public function getKeyVersion()
-    {
-        return $this->getParameter('keyVersion');
-    }
-    public function setKeyVersion($value)
-    {
-        return $this->setParameter('keyVersion', $value);
-    }
+
     public function getSecretKey()
     {
         return $this->getParameter('secretKey');
     }
+
     public function setSecretKey($value)
     {
         return $this->setParameter('secretKey', $value);
     }
-    public function getOrderId()
-    {
-        return $this->getParameter('orderId');
-    }
-    public function setOrderId($value)
-    {
-        return $this->setParameter('orderId', $value);
-    }
-    public function getCustomerLanguage()
-    {
-        return $this->getParameter('customerLanguage');
-    }
-    public function setCustomerLanguage($value)
-    {
-        return $this->setParameter('customerLanguage', $value);
-    }
+
     public function getData()
     {
         $this->validate(
-            'PAYGATE_ID',
             'REFERENCE',
             'AMOUNT',
-            'CURRENCY',
-            'RETURN_URL',
-            'LOCALE',
-            'COUNTRY',
             'EMAIL',
-            'PAY_METHOD',
-            'PAY_METHOD_DETAIL',
-            'NOTIFY_URL',
             'USER1',
             'USER2',
             'USER3'
         );
-//        $transRef = $this->getTransactionReference() ?: $this->getTransactionId();
+
+        // TODO: set for KE only (ke only config??)
+        $this->setCurrency('KES');
+        $this->setNotifyUrl('http://testing.olx.co.za');
+        $this->setReturnUrl('http://testing.olx.co.za');
+        $this->setLocale('en');
+        $this->setCountry('KEN');
+        $this->setPayMethod('EW');
+        $this->setPayMethodDetail('M-Pesa');
+
         $data = [];
-        $data['PAYGATE_ID'] = $this->getPaygateId();
+        $data['PAYGATE_ID'] = $this->getMerchantId();
         $data['REFERENCE'] = $this->getReference();
         $data['AMOUNT'] = $this->getAmount();
         $data['CURRENCY'] = $this->getCurrency();
         $data['RETURN_URL'] = $this->getReturnUrl();
+        $data['TRANSACTION_DATE'] = date('Y-m-d H:i:s', time());
         $data['LOCALE'] = $this->getLocale();
         $data['COUNTRY'] = $this->getCountry();
         $data['EMAIL'] = $this->getEmail();
+
+        // TODO: set for KE only
         $data['PAY_METHOD'] = $this->getPayMethod();
         $data['PAY_METHOD_DETAIL'] = $this->getPayMethodDetail();
+
         $data['NOTIFY_URL'] = $this->getNotifyUrl();
         $data['USER1'] = $this->getUser1();
         $data['USER2'] = $this->getUser2();
         $data['USER3'] = $this->getUser3();
+
         $data['CHECKSUM'] = $this->generateSignature($data);
 
         return $data;
@@ -206,26 +187,25 @@ class PurchaseRequest extends AbstractRequest
     public function generateSignature($data)
     {
         if (empty($data)) {
-            throw new InvalidRequestException('Missing Data parameter');
+            throw new InvalidRequestException('Missing data parameters');
         }
         $checksum = "";
         foreach ($data as $dKey => $dValue) {
             $checksum .= $dValue;
         }
+//        dd($checksum . $this->getSecretKey());
         return md5($checksum . $this->getSecretKey());
     }
 
 
     public function sendData($data)
     {
-        // DO HANDSHAKE
         $client = new Client();
-        $httpResponse = $client->post($this->getEndpoint(), null, $data);
+//        dd($data);
+        $httpResponse = $client->post($this->getEndpoint(), ['form_params' => $data]);
 
-        // PROCESS PAYMENT
-        // TODO
-
-        return $this->response = new PurchaseResponse($this, $httpResponse->getBody()->getContents());
+        $this->response = new PurchaseResponse($this, $httpResponse->getBody()->getContents());
+        return $this->response;
     }
 
     public function getEndpoint()
