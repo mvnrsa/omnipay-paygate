@@ -8,7 +8,7 @@ use Omnipay\Common\Message\RequestInterface;
 /**
  * Rabobank Complete Purchase Response
  */
-class CompletePurchaseResponse extends AbstractResponse
+class CompleteResponse extends AbstractResponse
 {
     /** @var array The internal (parsed) data */
     protected $i_data;

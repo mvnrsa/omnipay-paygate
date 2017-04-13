@@ -152,9 +152,9 @@ class PurchaseRequest extends AbstractRequest
         );
 
         // TODO: set for KE only (ke only config??)
+        $this->setNotifyUrl('https://testing-champs.olx.co.ke/payment/confirm/' . $this->getReference());
+        $this->setReturnUrl('https://testing-champs.olx.co.ke/payment/confirm/' . $this->getReference());
         $this->setCurrency('KES');
-        $this->setNotifyUrl('http://testing.olx.co.za');
-        $this->setReturnUrl('http://testing.olx.co.za');
         $this->setLocale('en');
         $this->setCountry('KEN');
         $this->setPayMethod('EW');

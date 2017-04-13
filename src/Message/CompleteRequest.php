@@ -5,7 +5,7 @@ namespace Omnipay\PayGate\Message;
 use Omnipay\Common\Exception\InvalidRequestException;
 
 /**
- * Rabobank Complete Purchase Request
+ * PayGate Complete Request
  */
 class CompletePurchaseRequest extends PurchaseRequest
 {
@@ -24,6 +24,6 @@ class CompletePurchaseRequest extends PurchaseRequest
 
     public function sendData($data)
     {
-        return $this->response = new CompletePurchaseResponse($this, $data);
+        return $this->response = new CompleteResponse($this, $data);
     }
 }
