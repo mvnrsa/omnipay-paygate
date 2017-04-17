@@ -23,7 +23,7 @@ class CompleteResponse
     {
         $this->post = $data;
         $this->secretKey = $secretKey;
-        $this->status = !empty($data['TRANSACTION_STATUS']) ? $data['TRANSACTION_STATUS'] : ''; // (0 Not Done; 1 Approved; 2 Declined; 3 Cancelled)
+        $this->status = !empty($data['TRANSACTION_STATUS']) ? $data['TRANSACTION_STATUS'] : '';
         $this->code = !empty($data['RESULT_CODE']) ? $data['RESULT_CODE'] : '';
         $this->paymentId = !empty($data['REFERENCE']) ? $data['REFERENCE'] : '';
         $this->paygateId = !empty($data['PAYGATE_ID']) ? $data['PAYGATE_ID'] : '';
