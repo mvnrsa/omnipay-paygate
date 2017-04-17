@@ -166,7 +166,8 @@ class PurchaseRequest extends AbstractRequest
         $data['COUNTRY'] = $this->getCountry();
         $data['EMAIL'] = $this->getEmail();
 
-        if(!empty($this->getPayMethod()) && !empty($this->getPayMethodDetail())) {
+        if(!$this->getTestMode() &&
+            !empty($this->getPayMethod()) && !empty($this->getPayMethodDetail())) {
             $data['PAY_METHOD'] = $this->getPayMethod();
             $data['PAY_METHOD_DETAIL'] = $this->getPayMethodDetail();
         }

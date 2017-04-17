@@ -102,7 +102,11 @@ class Gateway extends AbstractGateway
 
     public function setMerchantId($value)
     {
+        if($this->getTestMode()) {
+            $value = '10011072130';
+        }
         return $this->setParameter('merchantId', $value);
+
     }
 
     public function getSecretKey()
@@ -112,6 +116,9 @@ class Gateway extends AbstractGateway
 
     public function setSecretKey($value)
     {
+        if($this->getTestMode()) {
+            $value = 'secret';
+        }
         return $this->setParameter('secretKey', $value);
     }
 
