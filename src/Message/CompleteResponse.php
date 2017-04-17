@@ -6,113 +6,83 @@ use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
 
 /**
- * Rabobank Complete Purchase Response
+ * PayGate Complete Purchase Response
  */
-class CompleteResponse extends AbstractResponse
+class CompleteResponse
 {
-    /** @var array The internal (parsed) data */
-    protected $i_data;
+    protected $status;
+    protected $code;
+    protected $paymentId;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(RequestInterface $request, $data)
+    public function __construct($data)
     {
-        parent::__construct($request, $data);
-
-        $this->i_data = $this->getInternalData();
+        $this->status = $data['TRANSACTION_STATUS']; // (0 Not Done; 1 Approved; 2 Declined; 3 Cancelled)
+        $this->code = $data['RESULT_CODE'];
+        $this->paymentId = $data['REFERENCE'];
     }
 
     public function isSuccessful()
     {
-        return '00' === $this->getCode();
+        // TODO validate proivder response (eg, check that checksum matches etc)
+        return $this->status == 1 ? true : false;
     }
 
     public function getCode()
     {
-        return isset($this->i_data['responseCode']) ? $this->i_data['responseCode'] : null;
+        return isset($this->code) ? $this->code : null;
     }
 
     public function getMessage()
     {
         $code = $this->getCode();
         
-        $messages = array(
-            '00' => 'Transaction successful. Authorisation accepted (credit card).',
-            '02' => 'Credit card authorisation limit exceeded. Contact the Support Team Rabo OmniKassa.',
-            '03' => 'Invalid merchant contract.',
-            '05' => 'Refused.',
-            '12' => 'Invalid transaction. Check the fields in the payment request.',
-            '14' => 'Invalid credit card number, invalid card security code, '.
-                    'invalid card (MasterCard) or invalid Card Verification Value (MasterCard or VISA).',
-            '17' => 'Cancellation of payment by user.',
-            '24' => 'Invalid status.',
-            '25' => 'Transaction not found in database.',
-            '30' => 'Invalid format.',
-            '34' => 'Fraud suspicion.',
-            '40' => 'Operation not allowed for this merchant/webshop.',
-            '60' => 'Awaiting status report.',
-            '63' => 'Security problem detected. Transaction terminated.',
-            '75' => 'Maximum number of attempts to enter credit card number (3) exceeded.',
-            '90' => 'Rabo OmniKassa server temporarily unavailable.',
-            '94' => 'Duplicate transaction.',
-            '97' => 'Time period expired. Transaction refused.',
-            '99' => 'Payment page temporarily unavailable.',
-        );
+        $messages = [
+            '900001' => 'Call for Approval',
+            '900002' => 'Card Expired',
+            '900003' => 'Insufficient Funds',
+            '900004' => 'Invalid Card Number',
+            '900005' => 'Bank Interface Timeout',
+            '900006' => 'Invalid Card',
+            '900007' => 'Declined',
+            '900009' => 'Lost Card',
+            '900010' => 'Invalid Card Length',
+            '900011' => 'Suspected Fraud',
+            '900012' => 'Card Reported As Stolen',
+            '900013' => 'Restricted Card',
+            '900014' => 'Excessive Card Usage',
+            '900015' => 'Card Blacklisted',
+            '900207' => 'Declined; authentication failed',
+            '990020' => 'Auth Declined',
+            '991001' => 'Invalid expiry date',
+            '991002' => 'Invalid Amount',
+
+            '990017' => 'Auth Done',
+            '900205' => 'Unexpected authentication result (phase 1)',
+            '900206' => 'Unexpected authentication result (phase 1)',
+            '990001' => 'Could not insert into Database',
+            '990022' => 'Bank not available',
+            '990053' => 'Error processing transaction',
+
+            '900209' => 'Transaction verification failed (phase 2)',
+            '900210' => 'Authentication complete; transaction must be restarted',
+            '990024' => 'Duplicate Transaction Detected. Please check before submitting',
+            '990028' => 'Transaction cancelled'
+        ];
 
         return isset($messages[$code]) ? $messages[$code] : null;
     }
 
     public function getStatus()
     {
-        $code = $this->getCode();
-        $status = array(
-            '00' => 'SUCCESS',
-            '17' => 'CANCELLED',
-            '60' => 'PENDING',
-            '97' => 'EXPIRED',
-        );
+        $code = $this->status;
+        $status = [
+            '0' => 'Not Done',
+            '1' => 'Approved',
+            '2' => 'Declined',
+            '3' => 'Cancelled',
+            '4' => 'User Cancelled',
+        ];
 
-        return isset($status[$code]) ? $status[$code] : 'FAILED';
-    }
-
-    public function getTransactionId()
-    {
-        return isset($this->i_data['transactionReference']) ? $this->i_data['transactionReference'] : null;
-    }
-
-    public function getPaymentMethod()
-    {
-        return isset($this->i_data['paymentMeanBrand']) ? $this->i_data['paymentMeanBrand'] : null;
-    }
-
-    public function getAuthorisationId()
-    {
-        return isset($this->i_data['authorisationId']) ? $this->i_data['authorisationId'] : null;
-    }
-
-    public function getOrderId()
-    {
-        return isset($this->i_data['orderId']) ? $this->i_data['orderId'] : null;
-    }
-
-    /**
-     * Decode ridiculous 'Data' response parameter
-     */
-    public function getInternalData()
-    {
-        if (empty($this->data['Data'])) {
-            return;
-        }
-
-        $data = array();
-        foreach (explode('|', $this->data['Data']) as $line) {
-            $line = explode('=', $line, 2);
-            if (!empty($line[0])) {
-                $data[trim($line[0])] = isset($line[1]) ? trim($line[1]) : null;
-            }
-        }
-
-        return $data;
+        return !empty($status[$code]) ? $status[$code] : 'Failed';
     }
 }

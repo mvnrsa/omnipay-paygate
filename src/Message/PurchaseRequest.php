@@ -13,109 +13,113 @@ class PurchaseRequest extends AbstractRequest
     public $testEndpoint = 'https://secure.paygate.co.za/payweb3/initiate.trans';
     public $liveEndpoint = 'https://secure.paygate.co.za/payweb3/initiate.trans';
 
-    public function getReference()
-    {
-        return $this->getParameter('REFERENCE');
-    }
-    public function setReference($value)
-    {
-        return $this->setParameter('REFERENCE', $value);
-    }
-    public function getAmount()
-    {
-        return $this->getParameter('AMOUNT');
-    }
-    public function setAmount($value)
-    {
-        return $this->setParameter('AMOUNT', $value);
-    }
     public function getCurrency()
     {
-        return $this->getParameter('CURRENCY');
+        return $this->getParameter('currency');
     }
     public function setCurrency($value)
     {
-        return $this->setParameter('CURRENCY', $value);
-    }
-    public function getReturnUrl()
-    {
-        return $this->getParameter('RETURN_URL');
-    }
-    public function setReturnUrl($value)
-    {
-        return $this->setParameter('RETURN_URL', $value);
-    }
-    public function getLocale()
-    {
-        return $this->getParameter('LOCALE');
-    }
-    public function setLocale($value)
-    {
-        return $this->setParameter('LOCALE', $value);
+        return $this->setParameter('currency', $value);
     }
     public function getCountry()
     {
-        return $this->getParameter('COUNTRY');
+        return $this->getParameter('country');
     }
     public function setCountry($value)
     {
-        return $this->setParameter('COUNTRY', $value);
+        return $this->setParameter('country', $value);
     }
-    public function getEmail()
+    public function getLocale()
     {
-        return $this->getParameter('EMAIL');
+        return $this->getParameter('locale');
     }
-    public function setEmail($value)
+    public function setLocale($value)
     {
-        return $this->setParameter('EMAIL', $value);
+        return $this->setParameter('locale', $value);
     }
     public function getPayMethod()
     {
-        return $this->getParameter('PAY_METHOD');
+        return $this->getParameter('payMethod');
     }
     public function setPayMethod($value)
     {
-        return $this->setParameter('PAY_METHOD', $value);
+        return $this->setParameter('payMethod', $value);
     }
     public function getPayMethodDetail()
     {
-        return $this->getParameter('PAY_METHOD_DETAIL');
+        return $this->getParameter('payMethodDetail');
     }
     public function setPayMethodDetail($value)
     {
-        return $this->setParameter('PAY_METHOD_DETAIL', $value);
+        return $this->setParameter('payMethodDetail', $value);
     }
     public function getNotifyUrl()
     {
-        return $this->getParameter('NOTIFY_URL');
+        return $this->getParameter('notifyUrl');
     }
     public function setNotifyUrl($value)
     {
-        return $this->setParameter('NOTIFY_URL', $value);
+        return $this->setParameter('notifyUrl', $value);
+    }
+    public function getReturnUrl()
+    {
+        return $this->getParameter('returnUrl');
+    }
+    public function setReturnUrl($value)
+    {
+        return $this->setParameter('returnUrl', $value);
+    }
+
+
+
+
+    public function getReference()
+    {
+        return $this->getParameter('reference');
+    }
+    public function setReference($value)
+    {
+        return $this->setParameter('reference', $value);
+    }
+    public function getAmount()
+    {
+        return $this->getParameter('amount');
+    }
+    public function setAmount($value)
+    {
+        return $this->setParameter('amount', $value);
+    }
+    public function getEmail()
+    {
+        return $this->getParameter('email');
+    }
+    public function setEmail($value)
+    {
+        return $this->setParameter('email', $value);
     }
     public function getUser1()
     {
-        return $this->getParameter('USER1');
+        return $this->getParameter('user1');
     }
     public function setUser1($value)
     {
-        return $this->setParameter('USER1', $value);
+        return $this->setParameter('user1', $value);
     }
     public function getUser2()
     {
-        return $this->getParameter('USER2');
+        return $this->getParameter('user2');
     }
     public function setUser2($value)
     {
-        return $this->setParameter('USER2', $value);
+        return $this->setParameter('user2', $value);
     }
     public function getUser3()
     {
-        return $this->getParameter('USER3');
+        return $this->getParameter('user3');
     }
     public function setUser3($value)
     {
-        return $this->setParameter('USER3', $value);
+        return $this->setParameter('user3', $value);
     }
 
 
@@ -143,22 +147,13 @@ class PurchaseRequest extends AbstractRequest
     public function getData()
     {
         $this->validate(
-            'REFERENCE',
-            'AMOUNT',
-            'EMAIL',
-            'USER1',
-            'USER2',
-            'USER3'
+            'reference',
+            'amount',
+            'email',
+            'user1',
+            'user2',
+            'user3'
         );
-
-        // TODO: set for KE only (ke only config??)
-        $this->setNotifyUrl('https://testing-champs.olx.co.ke/payment/confirm/' . $this->getReference());
-        $this->setReturnUrl('https://testing-champs.olx.co.ke/payment/confirm/' . $this->getReference());
-        $this->setCurrency('KES');
-        $this->setLocale('en');
-        $this->setCountry('KEN');
-        $this->setPayMethod('EW');
-        $this->setPayMethodDetail('M-Pesa');
 
         $data = [];
         $data['PAYGATE_ID'] = $this->getMerchantId();
@@ -171,9 +166,10 @@ class PurchaseRequest extends AbstractRequest
         $data['COUNTRY'] = $this->getCountry();
         $data['EMAIL'] = $this->getEmail();
 
-        // TODO: set for KE only
-        $data['PAY_METHOD'] = $this->getPayMethod();
-        $data['PAY_METHOD_DETAIL'] = $this->getPayMethodDetail();
+        if(!empty($this->getPayMethod()) && !empty($this->getPayMethodDetail())) {
+            $data['PAY_METHOD'] = $this->getPayMethod();
+            $data['PAY_METHOD_DETAIL'] = $this->getPayMethodDetail();
+        }
 
         $data['NOTIFY_URL'] = $this->getNotifyUrl();
         $data['USER1'] = $this->getUser1();
@@ -193,7 +189,6 @@ class PurchaseRequest extends AbstractRequest
         foreach ($data as $dKey => $dValue) {
             $checksum .= $dValue;
         }
-//        dd($checksum . $this->getSecretKey());
         return md5($checksum . $this->getSecretKey());
     }
 
@@ -201,9 +196,7 @@ class PurchaseRequest extends AbstractRequest
     public function sendData($data)
     {
         $client = new Client();
-//        dd($data);
         $httpResponse = $client->post($this->getEndpoint(), ['form_params' => $data]);
-
         $this->response = new PurchaseResponse($this, $httpResponse->getBody()->getContents());
         return $this->response;
     }
