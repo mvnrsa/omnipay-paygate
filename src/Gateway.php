@@ -13,6 +13,9 @@ use Omnipay\PayGate\Message\CompleteResponse;
  */
 class Gateway extends AbstractGateway
 {
+    public $testMerchantId = '10011072130';
+    public $testSecretKey = 'secret';
+
     public function getName()
     {
         return 'PayGate';
@@ -103,7 +106,7 @@ class Gateway extends AbstractGateway
     public function setMerchantId($value)
     {
         if($this->getTestMode()) {
-            $value = '10011072130';
+            $value = $this->testMerchantId;
         }
         return $this->setParameter('merchantId', $value);
 
@@ -117,7 +120,7 @@ class Gateway extends AbstractGateway
     public function setSecretKey($value)
     {
         if($this->getTestMode()) {
-            $value = 'secret';
+            $value = $this->testSecretKey;
         }
         return $this->setParameter('secretKey', $value);
     }
