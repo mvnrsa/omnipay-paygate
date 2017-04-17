@@ -6,7 +6,7 @@ use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Exception\InvalidRequestException;
 
 /**
- * PayGate Initiate Request
+ * PayGate Purchase Request
  */
 class PurchaseRequest extends AbstractRequest
 {
@@ -180,6 +180,7 @@ class PurchaseRequest extends AbstractRequest
 
         return $data;
     }
+
     public function generateSignature($data)
     {
         if (empty($data)) {

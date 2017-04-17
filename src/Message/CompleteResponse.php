@@ -6,25 +6,64 @@ use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
 
 /**
- * PayGate Complete Purchase Response
+ * PayGate Complete Response
  */
 class CompleteResponse
 {
     protected $status;
     protected $code;
     protected $paymentId;
+    protected $paygateId;
+    protected $requestId;
+    protected $checksum;
+    protected $post;
+    protected $secretKey;
 
-    public function __construct($data)
+    public function __construct($data, $secretKey)
     {
-        $this->status = $data['TRANSACTION_STATUS']; // (0 Not Done; 1 Approved; 2 Declined; 3 Cancelled)
-        $this->code = $data['RESULT_CODE'];
-        $this->paymentId = $data['REFERENCE'];
+        $this->post = $data;
+        $this->secretKey = $secretKey;
+        $this->status = !empty($data['TRANSACTION_STATUS']) ? $data['TRANSACTION_STATUS'] : ''; // (0 Not Done; 1 Approved; 2 Declined; 3 Cancelled)
+        $this->code = !empty($data['RESULT_CODE']) ? $data['RESULT_CODE'] : '';
+        $this->paymentId = !empty($data['REFERENCE']) ? $data['REFERENCE'] : '';
+        $this->paygateId = !empty($data['PAYGATE_ID']) ? $data['PAYGATE_ID'] : '';
+        $this->requestId = !empty($data['PAY_REQUEST_ID']) ? $data['PAY_REQUEST_ID'] : '';
+        $this->checksum = !empty($data['CHECKSUM']) ? $data['CHECKSUM'] : '';
+    }
+
+    public function validate()
+    {
+        $validated = false;
+        if($this->status == 1) {
+            $validated = true; // TODO: remove to enable proper response validation
+            $data = $this->post;
+            if(isset($data['CHECKSUM'])) {
+                unset($data['CHECKSUM']);
+            }
+            $checksum = "";
+            foreach ($data as $dKey => $dValue) {
+                $checksum .= $dValue;
+            }
+            $hash = md5($checksum . $this->getSecretKey());
+            if($hash == $checksum) {
+                $validated = true;
+            }
+        }
+        return $validated;
     }
 
     public function isSuccessful()
     {
-        // TODO validate proivder response (eg, check that checksum matches etc)
-        return $this->status == 1 ? true : false;
+        $successful = false;
+        if($this->validate() == true) {
+            $successful = true;
+        }
+        return $successful;
+    }
+
+    public function getSecretKey()
+    {
+        return isset($this->secretKey) ? $this->secretKey : null;
     }
 
     public function getCode()

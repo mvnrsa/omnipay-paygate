@@ -131,7 +131,7 @@ class Gateway extends AbstractGateway
 
     public function complete(array $parameters = array())
     {
-        return new CompleteResponse($parameters);
+        return new CompleteResponse($parameters, $this->getSecretKey());
     }
 
     // CUSTOM
