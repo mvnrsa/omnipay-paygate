@@ -21,8 +21,6 @@ class CompleteResponse
 
     public function __construct($data, $secretKey)
     {
-        var_dump($secretKey);
-        dd($data);
         $this->post = $data;
         $this->secretKey = $secretKey;
         $this->status = !empty($data['TRANSACTION_STATUS']) ? $data['TRANSACTION_STATUS'] : '';
