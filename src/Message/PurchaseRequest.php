@@ -18,10 +18,16 @@ class PurchaseRequest extends AbstractRequest
 
     public function getCurrency()
     {
+        if($this->getTestMode()) {
+            return 'USD';
+        }
         return $this->getParameter('currency');
     }
     public function setCurrency($value)
     {
+        if($this->getTestMode()) {
+            return 'USD';
+        }
         return $this->setParameter('currency', $value);
     }
     public function getCountry()
