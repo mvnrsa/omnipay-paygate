@@ -63,7 +63,7 @@ class Gateway extends AbstractGateway
     }
     public function getPayMethod()
     {
-        return $this->getParameter('payMmethod');
+        return $this->getParameter('payMethod');
     }
     public function setPayMethod($value)
     {

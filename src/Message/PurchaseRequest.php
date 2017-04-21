@@ -15,7 +15,7 @@ class PurchaseRequest extends AbstractRequest
     public $testSecretKey = 'secret';
     public $testEndpoint = 'https://secure.paygate.co.za/payweb3/initiate.trans';
 
-
+    // set in config
     public function getCurrency()
     {
         if($this->getTestMode()) {
@@ -62,6 +62,9 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('payMethodDetail', $value);
     }
+    
+    
+    // set on payment request
     public function getNotifyUrl()
     {
         return $this->getParameter('notifyUrl');
@@ -78,10 +81,6 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('returnUrl', $value);
     }
-
-
-
-
     public function getReference()
     {
         return $this->getParameter('reference');
@@ -98,37 +97,40 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('amount', $value);
     }
-    public function getEmail()
+    
+    
+    
+    public function getUserEmail()
     {
-        return $this->getParameter('email');
+        return $this->getParameter('userEmail');
     }
-    public function setEmail($value)
+    public function setUserEmail($value)
     {
-        return $this->setParameter('email', $value);
+        return $this->setParameter('userEmail', $value);
     }
-    public function getUser1()
+    public function getUserName()
     {
-        return $this->getParameter('user1');
+        return $this->getParameter('userName');
     }
-    public function setUser1($value)
+    public function setUserName($value)
     {
-        return $this->setParameter('user1', $value);
+        return $this->setParameter('userName', $value);
     }
-    public function getUser2()
+    public function getUserId()
     {
-        return $this->getParameter('user2');
+        return $this->getParameter('userId');
     }
-    public function setUser2($value)
+    public function setUserId($value)
     {
-        return $this->setParameter('user2', $value);
+        return $this->setParameter('userId', $value);
     }
-    public function getUser3()
+    public function getUserPhone()
     {
-        return $this->getParameter('user3');
+        return $this->getParameter('userPhone');
     }
-    public function setUser3($value)
+    public function setUserPhone($value)
     {
-        return $this->setParameter('user3', $value);
+        return $this->setParameter('userPhone', $value);
     }
 
 
@@ -170,10 +172,10 @@ class PurchaseRequest extends AbstractRequest
         $this->validate(
             'reference',
             'amount',
-            'email',
-            'user1',
-            'user2',
-            'user3'
+            'userEmail',
+            'userPhone',
+            'userId',
+            'userName'
         );
 
         $data = [];
@@ -185,7 +187,7 @@ class PurchaseRequest extends AbstractRequest
         $data['TRANSACTION_DATE'] = date('Y-m-d H:i:s', time());
         $data['LOCALE'] = $this->getLocale();
         $data['COUNTRY'] = $this->getCountry();
-        $data['EMAIL'] = $this->getEmail();
+        $data['EMAIL'] = $this->getUserEmail();
 
         if(!$this->getTestMode() &&
             !empty($this->getPayMethod()) && !empty($this->getPayMethodDetail())) {
@@ -194,9 +196,9 @@ class PurchaseRequest extends AbstractRequest
         }
 
         $data['NOTIFY_URL'] = $this->getNotifyUrl();
-        $data['USER1'] = $this->getUser1();
-        $data['USER2'] = $this->getUser2();
-        $data['USER3'] = $this->getUser3();
+        $data['USER1'] = $this->getUserId();
+        $data['USER2'] = $this->getUserName();
+        $data['USER3'] = $this->getUserPhone();
 
         $data['CHECKSUM'] = $this->generateSignature($data);
 
