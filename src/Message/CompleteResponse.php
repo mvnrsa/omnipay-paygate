@@ -21,14 +21,17 @@ class CompleteResponse
 
     public function __construct($data, $secretKey)
     {
-        $this->post = $data;
         $this->secretKey = $secretKey;
-        $this->status = !empty($data['TRANSACTION_STATUS']) ? $data['TRANSACTION_STATUS'] : '';
-        $this->code = !empty($data['RESULT_CODE']) ? $data['RESULT_CODE'] : '';
-        $this->paymentId = !empty($data['REFERENCE']) ? $data['REFERENCE'] : '';
-        $this->paygateId = !empty($data['PAYGATE_ID']) ? $data['PAYGATE_ID'] : '';
-        $this->requestId = !empty($data['PAY_REQUEST_ID']) ? $data['PAY_REQUEST_ID'] : '';
-        $this->checksum = !empty($data['CHECKSUM']) ? $data['CHECKSUM'] : '';
+        $this->status = $this->getByKeyFromArray('TRANSACTION_STATUS', $data);
+        $this->code = $this->getByKeyFromArray('RESULT_CODE', $data);
+        $this->paymentId = $this->getByKeyFromArray('REFERENCE', $data);
+        $this->paygateId = $this->getByKeyFromArray('PAYGATE_ID', $data);
+        $this->requestId = $this->getByKeyFromArray('PAY_REQUEST_ID', $data);
+        $this->checksum = $this->getByKeyFromArray('CHECKSUM', $data);
+        if(isset($data['CHECKSUM'])) {
+            unset($data['CHECKSUM']);
+        }
+        $this->post = $data;
     }
 
     public function validate()
@@ -37,9 +40,6 @@ class CompleteResponse
         if($this->status == 1) {
             $validated = true; // TODO: remove to enable proper response validation
             $data = $this->post;
-            if(isset($data['CHECKSUM'])) {
-                unset($data['CHECKSUM']);
-            }
             $checksum = "";
             foreach ($data as $dKey => $dValue) {
                 $checksum .= $dValue;
@@ -123,5 +123,10 @@ class CompleteResponse
         ];
 
         return !empty($status[$code]) ? $status[$code] : 'Failed';
+    }
+
+    protected function getByKeyFromArray($key, $data)
+    {
+        return !empty($data[$key]) ? $data[$key] : '';
     }
 }

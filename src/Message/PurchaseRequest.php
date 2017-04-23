@@ -10,10 +10,8 @@ use Omnipay\Common\Exception\InvalidRequestException;
  */
 class PurchaseRequest extends AbstractRequest
 {
-    public $liveEndpoint = 'https://secure.paygate.co.za/payweb3/initiate.trans';
     public $testMerchantId = '10011072130';
     public $testSecretKey = 'secret';
-    public $testEndpoint = 'https://secure.paygate.co.za/payweb3/initiate.trans';
 
     // set in config
     public function getCurrency()
@@ -222,12 +220,12 @@ class PurchaseRequest extends AbstractRequest
     {
         $client = new Client();
         $httpResponse = $client->post($this->getEndpoint(), ['form_params' => $data]);
-        $this->response = new PurchaseResponse($this, $httpResponse->getBody()->getContents());
+        $this->response = new PurchaseResponse($this, $httpResponse->getBody()->getContents(), $this->getTestMode());
         return $this->response;
     }
 
     public function getEndpoint()
     {
-        return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
+        return 'https://secure.paygate.co.za/payweb3/initiate.trans';
     }
 }

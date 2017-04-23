@@ -125,11 +125,6 @@ class Gateway extends AbstractGateway
         return $this->setParameter('secretKey', $value);
     }
 
-    public function getFormRedirectUrl()
-    {
-        return 'https://secure.paygate.co.za/payweb3/process.trans';
-    }
-
 
 
     // BASE
