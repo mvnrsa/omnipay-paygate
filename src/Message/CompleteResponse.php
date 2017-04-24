@@ -38,7 +38,6 @@ class CompleteResponse
     {
         $validated = false;
         if($this->status == 1) {
-            $validated = true; // TODO: remove to enable proper response validation
             $data = $this->post;
             $checksum = "";
             foreach ($data as $dKey => $dValue) {
