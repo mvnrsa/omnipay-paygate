@@ -44,7 +44,7 @@ class CompleteResponse
                 $checksum .= $dValue;
             }
             $hash = md5($checksum . $this->getSecretKey());
-            if($hash == $checksum) {
+            if($hash == $this->checksum) {
                 $validated = true;
             }
         }
