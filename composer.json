@@ -1,5 +1,5 @@
 {
-    "name": "nikmakan-olx/omnipay-paygate",
+    "name": "olx-ssafrica/omnipay-paygate",
     "version": "2.0.0",
     "type": "library",
     "autoload": {
