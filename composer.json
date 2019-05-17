@@ -1,6 +1,6 @@
 {
-    "name": "olx-ssafrica/omnipay-paygate",
-    "version": "2.0.0",
+    "name": "s1nb2/omnipay-paygate",
+    "version": "2.0.1",
     "type": "library",
     "autoload": {
         "psr-4" : {
