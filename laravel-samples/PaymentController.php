@@ -31,7 +31,7 @@ class PaymentController extends Controller
 		elseif ($response->isSuccessful())
 			$this->processSuccessResponse($id, $method, $response);	// Will only happen for on-site methods
 		else
-			echo abort(500,$response->getMessage());
+			abort(500,$response->getMessage());
 	}
 
 	public function returnPage(string $id, string $method, Request $request)
