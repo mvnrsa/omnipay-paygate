@@ -16,21 +16,21 @@ class PurchaseRequest extends AbstractRequest
     // set in config
     public function getCurrency()
     {
-        if($this->getTestMode()) {
-            return 'USD';
-        }
         return $this->getParameter('currency');
     }
     public function setCurrency($value)
     {
-        if($this->getTestMode()) {
-            return 'USD';
-        }
         return $this->setParameter('currency', $value);
     }
     public function getCountry()
     {
-        return $this->getParameter('country');
+        $country = $this->getParameter('country');
+
+		// For some weird reason ZAF becomes ZA which then returns an error from PayGate - so we have to affix the F
+		if ($country == 'ZA')
+			$country .= 'F';
+
+		return $country;
     }
     public function setCountry($value)
     {
@@ -179,7 +179,7 @@ class PurchaseRequest extends AbstractRequest
         $data = [];
         $data['PAYGATE_ID'] = $this->getMerchantId();
         $data['REFERENCE'] = $this->getReference();
-        $data['AMOUNT'] = $this->getAmount();
+        $data['AMOUNT'] = (int)floor($this->getAmount()*100);
         $data['CURRENCY'] = $this->getCurrency();
         $data['RETURN_URL'] = $this->getReturnUrl();
         $data['TRANSACTION_DATE'] = date('Y-m-d H:i:s', time());

@@ -9,7 +9,7 @@ use Omnipay\Common\Message\RequestInterface;
 /**
  * PayGate Purchase Response
  */
-class PurchaseResponse extends AbstractResponse
+class PurchaseResponse extends AbstractResponse implements RedirectResponseInterface
 {
     public $testMode;
 
@@ -29,4 +29,24 @@ class PurchaseResponse extends AbstractResponse
         // todo: validate response from paygate... $this->data;
         return false;
     }
+
+	public function isRedirect()
+	{
+		return true;
+	}
+
+	public function getRedirectData()
+	{
+		parse_str($this->data, $data);
+		unset($data['CHECKSUM']);
+
+		$data['CHECKSUM'] = $this->request->generateSignature($data);
+
+		return $data;
+	}
+
+	public function getRedirectMethod()
+	{
+		return 'POST';
+	}
 }
