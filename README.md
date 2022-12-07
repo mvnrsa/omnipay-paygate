@@ -26,9 +26,8 @@ Or add [mvnrsa/omnipay-paygate](https://packagist.org/packages/mvnrsa/omnipay-pa
 ### Laravel
 The only specific PayGate package for laravel is abandoned and not compatible with php 8!  
 
-This package can be used very easily with Laravel and OmniPay to accept PayGate payments.
-I am in the process of also publishing a Laravel OmniPay PaymentsController package which will make it even easier.  
-Will publish a link here asap.  
+This package can be used very easily with Laravel and OmniPay to accept PayGate payments.  
+See the `laravel-samples` folder for a working Controller and sample config file.
 
 mvnrsa  
 2022/12/07
