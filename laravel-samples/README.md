@@ -17,5 +17,5 @@ Route::post('payment/{id}/returnPage/{method}', 'PaymentController@returnPage')-
 - The third displays a thank you page after payment.
 
 ## Configuration sample
-You will need a `config/payment_gateways.php` file with the setters and values needed for each gateway.  This make it easier to add gateways without changing anything other than the config file.  
-See the sample `payment_gateways.php` in this folder
+You will need a `config/payment_gateways.php` file with the setters and values needed for each gateway.  This makes it easier to add gateways without changing anything other than the config file.  
+See the sample `payment_gateways.php` in this folder.
