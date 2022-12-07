@@ -2,6 +2,8 @@
     "name": "mvnrsa/omnipay-paygate",
     "version": "2.0.1",
     "type": "library",
+    "homepage": "https://github.com/mvnrsa/omnipay-paygate",
+    "license": "MIT",
     "autoload": {
         "psr-4" : {
             "Omnipay\\PayGate\\" : "src/"
