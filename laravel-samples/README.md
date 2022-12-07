@@ -1,6 +1,6 @@
 # Sample Controller
 This folder contains a sample controller you can use with OmniPay in Laravel.  
-Feel free to copy and change for your needs
+Feel free to copy and change for your needs.
 
 ## Routing
 You will need a couple of payment routes in your `routes/web.php`:
@@ -17,5 +17,5 @@ Route::post('payment/{id}/returnPage/{method}', 'PaymentController@returnPage')-
 - The third displays a thank you page after payment.
 
 ## Configuration sample
-You will need a `config/payment_gateways.php` file with the settets and values needed for each gateway.  This make it easier to add gateways without changing anything other than the config file.  
+You will need a `config/payment_gateways.php` file with the setters and values needed for each gateway.  This make it easier to add gateways without changing anything other than the config file.  
 See the sample `payment_gateways.php` in this folder
