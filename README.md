@@ -12,7 +12,7 @@ If you use [Composer](http://getcomposer.org/), you can run the following comman
 composer require mvnrsa/omnipay-paygate:dev-master
 ```
 
-Or add [s1nb2/omnipay-paygate](https://packagist.org/packages/mvnrsa/omnipay-paygate) to your `composer.json` file:
+Or add [mvnrsa/omnipay-paygate](https://packagist.org/packages/mvnrsa/omnipay-paygate) to your `composer.json` file:
 
 ```json
 {
